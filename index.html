@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Happy Women's Day</title>
+      <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+      <style>
+         body{
+         margin:0;
+         height:100vh;
+         background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+         display:flex;
+         flex-direction:column;
+         align-items:center;
+         justify-content:center;
+         font-family:'Pacifico',cursive;
+         color:white;
+         text-align:center;
+         overflow:hidden;
+         }
+         /* START SCREEN */
+         #startScreen{
+         position:fixed;
+         top:0;
+         left:0;
+         width:100%;
+         height:100%;
+         background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+         display:flex;
+         align-items:center;
+         justify-content:center;
+         z-index:999;
+         }
+         .heart-start{
+         font-size:90px;
+         cursor:pointer;
+         animation:heartbeat 1.2s infinite;
+         }
+         @keyframes heartbeat{
+         0%{transform:scale(1)}
+         50%{transform:scale(1.25)}
+         100%{transform:scale(1)}
+         }
+         /* hidden youtube */
+         #music{
+         position:fixed;
+         width:0;
+         height:0;
+         border:0;
+         }
+         /* hearts */
+         .heart{
+         position:fixed;
+         bottom:-20px;
+         font-size:18px;
+         opacity:.7;
+         animation:floatUp linear forwards;
+         }
+         @keyframes floatUp{
+         to{
+         transform:translateY(-110vh);
+         opacity:0;
+         }
+         }
+         /* flowers */
+         .flower{
+         position:fixed;
+         top:-20px;
+         font-size:18px;
+         animation:fall linear forwards;
+         opacity:.8;
+         }
+         @keyframes fall{
+         to{
+         transform:translateY(110vh) rotate(360deg);
+         opacity:.2;
+         }
+         }
+         /* TITLE */
+         .title{
+         font-size:clamp(28px,6vw,38px);
+         margin-bottom:18px;
+         }
+         /* SLIDER */
+         .slider{
+         width:70%;
+         max-width:420px;
+         aspect-ratio:1/1;
+         position:relative;
+         overflow:hidden;
+         border-radius:20px;
+         box-shadow:0 12px 35px rgba(0,0,0,0.25);
+         }
+         .slide{
+         position:absolute;
+         width:100%;
+         height:100%;
+         opacity:0;
+         transform:scale(1.1);
+         transition:opacity .8s ease, transform 4s ease;
+         }
+         .slide img{
+         width:100%;
+         height:100%;
+         object-fit:cover;
+         }
+         .slide.active{
+         opacity:1;
+         transform:scale(1);
+         }
+         /* sparkles */
+         .sparkle{
+         position:absolute;
+         width:6px;
+         height:6px;
+         background:white;
+         border-radius:50%;
+         opacity:0;
+         animation:sparkle 2s infinite;
+         }
+         @keyframes sparkle{
+         0%{opacity:0;transform:scale(.5)}
+         50%{opacity:1;transform:scale(1.5)}
+         100%{opacity:0;transform:scale(.5)}
+         }
+         /* TEXT BOX */
+         .text-box{
+         width:70%;
+         max-width:420px;
+         height:160px;
+         margin-top:20px;
+         padding-bottom:20px;
+         overflow-y:auto;
+         font-size:clamp(14px,4vw,16px);
+         line-height:1.7;
+         }
+         .text-box::-webkit-scrollbar{
+         width:0;
+         }
+         .text-box:hover::-webkit-scrollbar{
+         width:6px;
+         }
+         .text-box:hover::-webkit-scrollbar-thumb{
+         background:rgba(255,255,255,.6);
+         border-radius:10px;
+         }
+         #message{
+         white-space:pre-line;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- START SCREEN -->
+      <div id="startScreen">
+         <div class="heart-start">❤️</div>
+      </div>
+      <!-- MAIN PAGE -->
+      <div id="pageContent" style="display:none;flex-direction:column;align-items:center;">
+         <iframe id="music"
+            src="https://www.youtube.com/embed/06-XXOTP3Gc?enablejsapi=1&loop=1&playlist=06-XXOTP3Gc"
+            allow="autoplay">
+         </iframe>
+         <div class="title">Happy Women's Day 💐</div>
+         <div class="slider" id="slider">
+            <div class="slide active">
+               <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330">
+            </div>
+            <div class="slide">
+               <img src="https://images.unsplash.com/photo-1504196606672-aef5c9cefc92">
+            </div>
+            <div class="slide">
+               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f">
+            </div>
+            <div class="slide">
+               <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9">
+            </div>
+         </div>
+         <div class="text-box" id="textBox">
+            <div id="message"></div>
+         </div>
+      </div>
+      <script>
+         /* START PAGE */
+         
+         let started=false
+         
+         function startPage(){
+         
+         if(started) return
+         
+         document.getElementById("startScreen").style.display="none"
+         
+         let page=document.getElementById("pageContent")
+         
+         page.style.display="flex"
+         
+         let iframe=document.getElementById("music")
+         
+         iframe.src=iframe.src+"&autoplay=1"
+         
+         started=true
+         
+         }
+         
+         document.querySelector(".heart-start").addEventListener("click",startPage)
+         document.querySelector(".heart-start").addEventListener("touchstart",startPage)
+         
+         /* SLIDER */
+         
+         let slides=document.querySelectorAll(".slide")
+         
+         let index=0
+         
+         setInterval(()=>{
+         
+         slides[index].classList.remove("active")
+         
+         index=(index+1)%slides.length
+         
+         slides[index].classList.add("active")
+         
+         },2500)
+         
+         /* MESSAGE */
+         
+         let text=`Gửi Hà ❤️
+         
+         Chúc em một ngày 8/3 thật nhiều niềm vui,
+         thật nhiều tiếng cười và thật nhiều yêu thương.
+         
+         Cảm ơn em vì đã xuất hiện trong cuộc sống của anh,
+         làm cho những ngày bình thường trở nên đặc biệt hơn.
+         
+         Anh không giỏi nói những lời hoa mỹ,
+         nhưng anh luôn muốn em biết rằng:
+         
+         Em rất quan trọng với anh.
+         
+         Hy vọng rằng mỗi ngày bên nhau
+         sẽ luôn đầy ắp những kỷ niệm đẹp,
+         những cái nắm tay thật chặt,
+         và những nụ cười thật ấm áp.
+         
+         Chúc cô gái của anh
+         luôn xinh đẹp,
+         luôn vui vẻ,
+         và luôn hạnh phúc.
+         
+         Happy Women's Day 🌷
+         Anh thương em rất nhiều ❤️
+         `
+         
+         let i=0
+         
+         function typeWriter(){
+         
+         if(i<text.length){
+         
+         document.getElementById("message").innerHTML+=text.charAt(i)
+         
+         i++
+         
+         autoScroll()
+         
+         setTimeout(typeWriter,35)
+         
+         }
+         
+         }
+         
+         function autoScroll(){
+         
+         let box=document.getElementById("textBox")
+         
+         if(box.scrollHeight-box.scrollTop-box.clientHeight<80){
+         box.scrollTop=box.scrollHeight
+         }
+         
+         }
+         
+         typeWriter()
+         
+         /* HEARTS */
+         
+         function createHeart(){
+         
+         let heart=document.createElement("div")
+         
+         heart.className="heart"
+         
+         heart.innerHTML="💗"
+         
+         heart.style.left=Math.random()*100+"vw"
+         
+         heart.style.animationDuration=(5+Math.random()*5)+"s"
+         
+         document.body.appendChild(heart)
+         
+         setTimeout(()=>heart.remove(),10000)
+         
+         }
+         
+         setInterval(createHeart,1200)
+         
+         /* FLOWERS */
+         
+         function createFlower(){
+         
+         let flower=document.createElement("div")
+         
+         flower.className="flower"
+         
+         flower.innerHTML="🌸"
+         
+         flower.style.left=Math.random()*100+"vw"
+         
+         flower.style.animationDuration=(6+Math.random()*6)+"s"
+         
+         document.body.appendChild(flower)
+         
+         setTimeout(()=>flower.remove(),12000)
+         
+         }
+         
+         setInterval(createFlower,2000)
+         
+         /* SPARKLES */
+         
+         let slider=document.getElementById("slider")
+         
+         for(let i=0;i<15;i++){
+         
+         let s=document.createElement("div")
+         
+         s.className="sparkle"
+         
+         s.style.top=Math.random()*100+"%"
+         
+         s.style.left=Math.random()*100+"%"
+         
+         s.style.animationDelay=Math.random()*2+"s"
+         
+         slider.appendChild(s)
+         
+         }
+         
+      </script>
+   </body>
+</html>
